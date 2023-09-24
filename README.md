@@ -41,3 +41,14 @@ see aarch64-rust_os.json
 }
 
 ```
+
+## Bare metal in apple m chip series
+```shell
+xcode-select --install
+brew install gdb picocom qemu
+brew install --cask gcc-aarch64-embedded
+rustup update
+rustup target add aarch64-unknown-none thumbv7em-none-eabihf
+rustup component add llvm-tools-preview
+cargo install cargo-binutils cargo-embed
+```
