@@ -14,3 +14,30 @@ tutorials for making os with rust
 5. Linker errors - By default Rust tries to build an executable that is able to run in your current system environment. -> we should add option when execute `cargo build`
 -> `rustup target add thumbv7em-none-eabihf` -> `cargo build --target thumbv7em-none-eabihf`
    (target thumbv7em-none-eabihf which describes an embedded ARM system) (in macOS, use `cargo rustc -- -C link-args="-e __start -static -nostartfiles"`)
+
+
+## Target specification
+see aarch64-rust_os.json
+
+```json
+{
+   "llvm-target": "aarch64-unknown-none",
+   "data-layout": "e-m:e-i64:64-f80:128-n8:16:32:64-S128",
+   "arch": "aarch64",
+   "target-endian": "little",
+   "target-pointer-width": "64",
+   "target-c-int-width": "32",
+   "os": "none",
+   "executables": true,
+   // Instead of using the platform’s default linker (which might not support Linux targets), we use the cross-platform LLD linker that is shipped with Rust for linking our kernel.
+   "linker-flavor": "ld.lld",
+   "linker": "rust-lld",
+   // This setting specifies that the target doesn’t support stack unwinding on panic, so instead the program should abort directly. This has the same effect as the panic = "abort" option in our Cargo.toml
+   "panic-strategy": "abort",
+   // We’re writing a kernel, so we’ll need to handle interrupts at some point. To do that safely, we have to disable a certain stack pointer optimization called the “red zone”, because it would cause stack corruption otherwise.
+   "disable-redzone": true,
+   // The mmx and sse features determine support for Single Instruction Multiple Data (SIMD) instructions, which can often speed up programs significantly.
+   "features": "-mmx,-sse,+soft-float"
+}
+
+```
