@@ -52,3 +52,14 @@ rustup target add aarch64-unknown-none thumbv7em-none-eabihf
 rustup component add llvm-tools-preview
 cargo install cargo-binutils cargo-embed
 ```
+
+
+## AARCH64 Bare metal
+I ran below command for proper bare metal setting (feature `-mmx`, `+soft-float`, `-sse` is not supported in aarch64)
+```shell
+rustc -Z unstable-options --print target-spec-json --target aarch64-unknown-none > aarch64-rust_os.json
+```
+
+## built in func which links to os's c func
+use `compiler_builtins` crate built-in func instead of that os's c func. -> commit 31afdc78f88d6fc867df5ed3fe7898a1a632c771
+
