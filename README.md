@@ -91,5 +91,6 @@ You can do so by executing
 rustup component add llvm-tools-preview.
 ```
 
-
+## Caution
+I immediately stopped this project due to cpu architecture,,,
 
