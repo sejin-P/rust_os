@@ -63,3 +63,33 @@ rustc -Z unstable-options --print target-spec-json --target aarch64-unknown-none
 ## built in func which links to os's c func
 use `compiler_builtins` crate built-in func instead of that os's c func. -> commit 31afdc78f88d6fc867df5ed3fe7898a1a632c771
 
+
+## Creating a Bootimage
+To turn our compiled kernel into a bootable disk image, we need to link it with a bootloader.
+
+Instead of writing my own bootloader, which is a project on its own, I use the bootloader crate.
+
+This crate implements a basic BIOS bootloader without any C dependencies, just Rust and inline assembly.
+-> commit 5653678f81f2e7d3babafdbadf8440a461683d13
+
+Adding the bootloader as a dependency is not enough to actually create a bootable disk image.
+
+The problem is that we need to link our kernel with the bootloader after compilation, but cargo has no support for post-build scripts.
+
+To solve this problem, we created a tool named bootimage that first compiles the kernel and bootloader, and then links them together to create a bootable disk image.
+
+To install the tool, go into your home directory (or any directory outside your cargo project) and execute the following command in your terminal:
+
+```shell
+cargo install bootimage
+```
+
+For running bootimage and building the bootloader, you need to have the llvm-tools-preview rustup component installed.
+
+You can do so by executing 
+```shell
+rustup component add llvm-tools-preview.
+```
+
+
+
